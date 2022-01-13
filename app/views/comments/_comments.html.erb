@@ -1,0 +1,19 @@
+<p>
+  <% @product.comments.each do |comment| %>
+  <ul>
+    <td>
+      <li>
+        <tr><%= comment.content %></tr>
+        <% if user_signed_in? %>
+          <% if comment.user_id == current_user.id %>
+
+          <tr><%= link_to 'Edit', edit_product_comment_path(@product.id, comment.id), class: "btn  btn-warning btn-sm" %></tr>
+          <tr><%= link_to 'Destroy', product_comment_path(@product.id, comment.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-sm" %></tr>
+        <% end %>
+        <% end %>
+      </li>
+    </td>
+  </ul>
+<% end %>
+
+</p>

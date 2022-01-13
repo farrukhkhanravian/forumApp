@@ -1,0 +1,50 @@
+<p>
+  <strong>Name:</strong>
+  <%= @product.title %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  $<%= @product.price %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @product.description %>
+</p>
+<p>
+  <strong>Category:</strong>
+  <%= @product.categoryType %>
+</p>
+
+<!--To show tags-->
+<p>
+  <strong>Tags:</strong>
+  <% @product.tags.each do |tag| %>
+    <%= link_to tag.name, tag_path(tag) %>
+  <% end %>
+</p>
+
+<strong>Likes </strong> <strong><%= @product.likes.count %></strong>
+<% if user_signed_in? %>
+  <% like = current_user.likes.find_by(product: @product) %>
+  <% if like.nil? %>
+    <%= button_to "Like", like_path(@product), method: "put" %>
+  <% else %>
+    <%= button_to "Unlike", unlike_path(@product), method: "put" %>
+  <% end %>
+<% end %>
+<p>
+  <strong>Comments:</strong>
+  <!-- The comment is render by the the partials-->
+  <!--collect data from the comments directory and comments partial html-->
+  <%= render 'comments/comments' %>
+  <!--  Here we are passing product object as parameter by this we can access the use this in the comments from-->
+  <% if user_signed_in? %>
+    <%= render 'comments/form', product: @product %>
+  <% end %>
+</p>
+
+  <% if can? :update, @product %> <%= link_to 'Edit', edit_product_path, class: "btn btn-warning" %> |
+  <% end %>
+  <%= link_to "Back", products_path, class: "btn btn-info" %>

@@ -1,0 +1,57 @@
+<%= form_for(@product) do |f| %>
+  <%= render 'layouts/error' %>
+  <div class="form-container">
+    <div class="row">
+      <div class="form-group col-md-4">
+        <%= f.label :title %><br>
+        <%= f.text_field :title, class: "form-control" %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-4">
+        <%= f.label :price %><br>
+        <%= f.number_field :price, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-4">
+        <%= f.label :description %><br>
+        <%= f.text_area :description, class: "form-control" %>
+      </div>
+    </div>
+
+    <!--  code for category input-->
+    <div class="row">
+      <div class="form-group col-md-4">
+        <%= f.label :category %><br>
+        <%= f.select :categoryType, Category.all.map { |c| [c.categoryType] } %>
+      </div>
+    </div>
+
+    <!--  code for tags input at user side but later on we need to remove it-->
+    <div class="row">
+      <div class="form-group col-md-4">
+
+        <%= f.label "Tags List" %> <br/>
+        <!--      This is the code which will tell us that the if check boxes are already checked then uncheck if i uncheck-->
+        <!--      at edit time-->
+        <% hidden_field_tag "products[tag_ids][]", nil %>
+        <% Tag.all.each do |tag| %>
+          <!--      f.check_box is 1 method to implement, but in our case we get data from database and in database-->
+          <!--        their are no of record and the data will fetch as array, and in the array we need to use -->
+          <!--        check_box_tag and after tag.id, the second parts check either the tag are check or not if the -->
+          <!--        tags are checked already then will be show in the check list while we edit the form-->
+          <%= check_box_tag "products[tagging_attributes][tag_ids][]", tag.id, @product.tag_ids.include?(tag.id), id: dom_id(tag) %>
+          <%= label_tag dom_id(tag), tag.name %>
+          <br/>
+        <% end %>
+
+      </div>
+    </div>
+
+    <div class="actions">
+      <%= f.submit class: "btn btn-primary" %>
+    </div>
+<% end %>
+</div>
